@@ -54,8 +54,9 @@ main{width:100%;max-width:1180px;margin:auto;padding:54px 24px 70px}
 .dots button.active{width:25px;border-radius:999px;background:var(--gold)}
 
 
-/* TEMPLE HISTORY BUTTON (devotional animation) */
+/* DEVOTIONAL ANIMATED BUTTONS (Temple History + Temple Videos) */
 .history-cta{display:flex;justify-content:center;margin-top:8px}
+.video-cta{display:flex;justify-content:center;margin-top:8px}
 .history-btn{position:relative;display:inline-flex;align-items:center;gap:14px;padding:16px 40px;overflow:hidden;border-radius:999px;border:2px solid var(--saffron);text-decoration:none;color:var(--blue-dark);font-family:"Cinzel",Georgia,serif;font-size:1.1rem;font-weight:800;letter-spacing:.08em;background:linear-gradient(135deg,var(--gold-light),var(--gold) 55%,#e8a92a);box-shadow:0 0 0 4px rgba(246,195,68,.3),0 12px 30px rgba(232,91,22,.25);animation:diyaGlow 2.8s ease-in-out infinite;transition:transform .25s ease}
 .history-btn::after{content:"";position:absolute;top:0;left:-70%;width:45%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.7),transparent);transform:skewX(-20deg);pointer-events:none;animation:diyaShine 4.5s ease-in-out infinite}
 .history-btn:hover{transform:translateY(-3px) scale(1.04)}
@@ -64,13 +65,6 @@ main{width:100%;max-width:1180px;margin:auto;padding:54px 24px 70px}
 @keyframes diyaGlow{0%,100%{box-shadow:0 0 0 4px rgba(246,195,68,.3),0 12px 30px rgba(232,91,22,.25)}50%{box-shadow:0 0 0 11px rgba(246,195,68,.12),0 12px 44px rgba(232,91,22,.5)}}
 @keyframes diyaShine{0%,60%{left:-70%}100%{left:130%}}
 @keyframes diyaFlicker{0%,100%{transform:scale(1) rotate(-3deg)}25%{transform:scale(1.12) rotate(3deg)}50%{transform:scale(.96) rotate(-2deg)}75%{transform:scale(1.08) rotate(2deg)}}
-
-/* TEMPLE VIDEOS BUTTON */
-.video-cta{display:flex;justify-content:center;margin-top:24px}
-.video-btn{position:relative;display:inline-flex;align-items:center;gap:12px;padding:14px 34px;border-radius:999px;border:2px solid var(--blue);text-decoration:none;color:var(--white);font-family:"Cinzel",Georgia,serif;font-size:1rem;font-weight:800;letter-spacing:.06em;background:linear-gradient(135deg,var(--blue-light),var(--blue));box-shadow:0 10px 25px rgba(20,47,120,.25);transition:transform .25s ease,box-shadow .25s ease}
-.video-btn:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 14px 32px rgba(20,47,120,.35)}
-.video-btn:active{transform:scale(.98)}
-.video-icon{font-size:1.2rem;line-height:1}
 
 /* DEVOTIONAL QUOTE */
 .quote{position:relative;margin:55px 0 0;padding:45px 25px;text-align:center;border-radius:var(--radius);background:radial-gradient(circle at center,rgba(246,195,68,.15),transparent 60%),var(--blue);color:var(--white);overflow:hidden}
@@ -139,7 +133,7 @@ footer h2{color:var(--gold);font-family:"Cinzel",Georgia,serif;font-size:clamp(1
   <section class="hero" id="gallery">
     <div class="section-heading">
       <span class="section-kicker">Divine Darshan</span>
-      <h2>Welcome to Shri Kothanda Ramar Temple</h2>
+      <h2>Welcome to Shri Chathurbuja Kothanda Ramar Temple</h2>
       <div class="ornament"><span></span></div>
     </div>
     <div class="slideshow" id="slideshow" aria-label="Temple photo slideshow">
@@ -152,7 +146,7 @@ footer h2{color:var(--gold);font-family:"Cinzel",Georgia,serif;font-size:clamp(1
   <!-- TEMPLE INFORMATION -->
   <section id="temple">
     <div class="section-heading">
-      <span class="section-kicker">Temple</span>
+      <span class="section-kicker"></span>
       <h2>A Place of Faith &amp; Devotion</h2>
       <div class="ornament"><span></span></div>
     </div>
@@ -167,14 +161,13 @@ footer h2{color:var(--gold);font-family:"Cinzel",Georgia,serif;font-size:clamp(1
 
     <!-- TEMPLE VIDEOS -->
     <div class="section-heading" style="margin-top:42px;">
-      <span class="section-kicker">Temple Videos</span>
       <h2>TEMPLE VIDEOS</h2>
       <div class="ornament"><span></span></div>
     </div>
 
     <div class="video-cta">
-      <a class="video-btn" href="Temple_Videos.html">
-        <span class="video-icon" aria-hidden="true">▶</span>
+      <a class="history-btn" href="Temple_Videos.html">
+        <span class="diya" aria-hidden="true">🎬</span>
         <span>Click Here Temple Videos</span>
       </a>
     </div>
@@ -183,7 +176,7 @@ footer h2{color:var(--gold);font-family:"Cinzel",Georgia,serif;font-size:clamp(1
   <!-- DEVOTIONAL MESSAGE -->
   <section id="trust">
     <div class="quote">
-      <p>“Shri Kothanda Ramar bless all devotees with peace, prosperity, good health and divine grace.”</p>
+      <p>“Shri Chathurbuja Kothanda Ramar bless all devotees with peace, prosperity, good health and divine grace.”</p>
     </div>
   </section>
 
@@ -299,4 +292,4 @@ restart();
 document.getElementById("year").textContent = new Date().getFullYear();
 </script>
 </body>
-</html>
+</html>	

@@ -83,6 +83,28 @@ footer h2{color:var(--gold);font-family:"Cinzel",Georgia,serif;font-size:clamp(1
 .card a:hover{color:var(--saffron)}
 .copyright{margin-top:35px;padding-top:20px;border-top:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.5);font-size:.75rem}
 
+/* TEMPLE ADDRESS + GOOGLE MAP BUTTON */
+.address{max-width:560px;margin:34px auto 0;padding:28px 24px 30px;border-radius:20px;border:1px solid rgba(246,195,68,.35);background:rgba(255,255,255,.05)}
+.address-label{display:block;color:var(--gold);font-size:.78rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase}
+.address-text{margin-top:12px;font-family:"Cinzel",Georgia,serif;font-weight:700;letter-spacing:.05em;line-height:1.7;color:var(--white);font-size:clamp(.95rem,2.2vw,1.1rem)}
+.address-text span{display:block}
+.map-cta{display:flex;justify-content:center;margin-top:24px}
+.map-btn{position:relative;display:inline-flex;align-items:center;gap:12px;padding:14px 32px;border-radius:999px;border:3px solid #4aa3ff;background:var(--white);color:var(--blue);text-decoration:none;font-family:"DM Sans","Segoe UI",sans-serif;font-size:1.02rem;font-weight:800;letter-spacing:.05em;animation:mapPulse 2.2s ease-out infinite;transition:transform .25s ease,background .25s ease,color .25s ease}
+.map-btn:hover{transform:translateY(-3px) scale(1.05);background:#e8f3ff}
+.map-btn:active{transform:scale(.97)}
+.map-pin{display:inline-block;font-size:1.5rem;line-height:1;transform-origin:50% 100%;animation:pinBounce 1.4s ease-in-out infinite;filter:drop-shadow(0 3px 3px rgba(0,0,0,.25))}
+@keyframes mapPulse{
+  0%{box-shadow:0 0 0 0 rgba(74,163,255,.65),0 10px 26px rgba(0,0,0,.3)}
+  70%{box-shadow:0 0 0 20px rgba(74,163,255,0),0 10px 26px rgba(0,0,0,.3)}
+  100%{box-shadow:0 0 0 0 rgba(74,163,255,0),0 10px 26px rgba(0,0,0,.3)}
+}
+@keyframes pinBounce{
+  0%,100%{transform:translateY(0) scale(1,1)}
+  30%{transform:translateY(-9px) scale(.95,1.08)}
+  50%{transform:translateY(0) scale(1.1,.9)}
+  65%{transform:translateY(-3px) scale(1,1)}
+}
+
 :focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 
 @media (max-width:800px){
@@ -102,11 +124,13 @@ footer h2{color:var(--gold);font-family:"Cinzel",Georgia,serif;font-size:clamp(1
   .history-btn{padding:14px 30px;font-size:1rem}
   .quote{margin-top:38px}
   .card{width:100%}
+  .address{padding:24px 16px 26px}
+  .map-btn{padding:13px 26px;font-size:.95rem}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   .slide,.arrow{transition:none}
-  .history-btn,.history-btn::after,.diya{animation:none}
+  .history-btn,.history-btn::after,.diya,.map-btn,.map-pin{animation:none}
 }
 </style>
 </head>
@@ -191,6 +215,23 @@ footer h2{color:var(--gold);font-family:"Cinzel",Georgia,serif;font-size:clamp(1
       <div class="card"><small>TRUSTEE</small><b>SURESH</b></div>
       <div class="card"><small>CONTACT</small><b><a href="tel:+919840635758">9840635758</a></b></div>
     </div>
+
+    <!-- TEMPLE ADDRESS -->
+    <div class="address" id="address">
+      <span class="address-label">Temple Address</span>
+      <div class="address-text">
+        <span>SHRI CHATHURBUJA KOTHANDA RAMAR TEMPLE</span>
+        <span>PONPATHIRKOODAM</span>
+        <span>CHENGALPATTU</span>
+      </div>
+      <div class="map-cta">
+        <a class="map-btn" href="https://share.google/tVxWSYBU83KpfGY0p" target="_blank" rel="noopener">
+          <span class="map-pin" aria-hidden="true">📍</span>
+          <span>View on Google Maps</span>
+        </a>
+      </div>
+    </div>
+
     <div class="copyright">© <span id="year"></span> Shri Chathurbuja Ramar Seva Trust. All Rights Reserved.</div>
   </div>
 </footer>
@@ -292,4 +333,4 @@ restart();
 document.getElementById("year").textContent = new Date().getFullYear();
 </script>
 </body>
-</html>	
+</html>

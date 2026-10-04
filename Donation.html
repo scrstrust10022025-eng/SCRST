@@ -78,6 +78,13 @@ main{width:100%;max-width:1180px;margin:auto;padding:55px 24px 75px}
 .upi-button:active{transform:scale(.98)}
 .pay-icon{display:inline-block;font-size:1.5rem;line-height:1;animation:heartBeat 1.4s ease-in-out infinite;filter:drop-shadow(0 0 8px rgba(246,195,68,.9))}
 
+
+/* BACKUP BUTTONS */
+.alt-row{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;max-width:950px;margin:22px auto 0}
+.alt-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 24px;border-radius:999px;border:2px solid var(--gold);background:var(--white);color:var(--blue);font:700 .92rem "DM Sans",sans-serif;text-decoration:none;cursor:pointer;transition:.25s ease}
+.alt-btn:hover{background:var(--blue);color:var(--gold);border-color:var(--blue)}
+.alt-note{max-width:620px;margin:16px auto 0;text-align:center;color:var(--muted);font-size:.85rem}
+
 @keyframes glow{0%,100%{filter:brightness(1)}50%{filter:brightness(1.06)}}
 @keyframes shine{0%,60%{left:-70%}100%{left:130%}}
 @keyframes flicker{0%,100%{transform:scale(1) rotate(-3deg)}25%{transform:scale(1.12) rotate(3deg)}50%{transform:scale(.96) rotate(-2deg)}75%{transform:scale(1.08) rotate(2deg)}}
@@ -188,12 +195,18 @@ footer h2{color:var(--gold);font-family:"Cinzel",Georgia,serif;font-size:clamp(1
 
   <!-- PAY BUTTON: below bank details + QR -->
   <div class="pay-cta">
-    <a href="upi://pay?pa=shri9944455@barodampay&amp;pn=SHRI%20CHATHURBUJARAMAR%20SEVA%20TRUST&amp;mc=&amp;tn=Verified%20Merchant&amp;am=&amp;cu=INR&amp;url=&amp;mode=02&amp;orgid=159012&amp;mid=&amp;msid=&amp;mtid=&amp;sign=MEQCIAb12OPYtU7Q4tROZfmHHEA9ZTJkHuH0LJMrUaYAQAtzAiALed9vmPYTXcZpf0V4vSD9+2+QJYqUl+VJC4VpzjqyIA=="
-       class="upi-button">
+    <a id="upiLink" class="upi-button" href="#">
       <span class="pay-icon" aria-hidden="true">🙏</span>
       <span>Pay via UPI</span>
     </a>
   </div>
+
+  <!-- BACKUP OPTIONS -->
+  <div class="alt-row">
+    <button type="button" class="alt-btn" id="copyUpi">📋 Copy UPI ID</button>
+    <a class="alt-btn" id="qrDownload" href="#" download="Temple-Donation-QR">⬇ Download QR</a>
+  </div>
+  <p class="alt-note">If the Pay button does not open your app, scan the QR above, or copy the UPI ID and pay from GPay / PhonePe / Paytm using &ldquo;Pay to UPI ID&rdquo;.</p>
 </main>
 
 <!-- FOOTER -->
@@ -224,6 +237,37 @@ const qrExts = ["jpg","jpeg","png","webp","JPG","JPEG","PNG","WEBP"];
 let qi = 0;
 qrImg.onerror = () => { qi++; qi < qrExts.length ? qrImg.src = "PaymentQR/QR." + qrExts[qi] : qrWrap.classList.add("missing"); };
 qrImg.src = "PaymentQR/QR." + qrExts[0];
+
+
+/* ---------- UPI SETTINGS ----------
+   Change UPI_ID here when the bank gives a regular (non-merchant) UPI ID.      */
+const UPI_ID   = "shri9944455@barodampay";
+const UPI_NAME = "SHRI CHATHURBUJARAMAR SEVA TRUST";
+
+const upiLink = "upi://pay?pa=" + encodeURIComponent(UPI_ID).replace("%40","@") +
+                "&pn=" + encodeURIComponent(UPI_NAME) + "&cu=INR";
+document.getElementById("upiLink").href = upiLink;
+
+/* Copy UPI ID */
+document.getElementById("copyUpi").addEventListener("click", function () {
+  const btn = this, old = btn.innerHTML;
+  const done = () => { btn.innerHTML = "&#10003; Copied: " + UPI_ID; setTimeout(() => btn.innerHTML = old, 2500); };
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(UPI_ID).then(done, () => window.prompt("Copy this UPI ID:", UPI_ID));
+  } else {
+    const t = document.createElement("textarea");
+    t.value = UPI_ID; document.body.appendChild(t); t.select();
+    try { document.execCommand("copy"); done(); } catch (e) { window.prompt("Copy this UPI ID:", UPI_ID); }
+    t.remove();
+  }
+});
+
+/* Download QR (uses whichever QR file was found) */
+qrImg.addEventListener("load", () => {
+  const a = document.getElementById("qrDownload");
+  a.href = qrImg.src;
+  a.download = "Temple-Donation-QR" + qrImg.src.substring(qrImg.src.lastIndexOf("."));
+});
 
 document.getElementById("year").textContent = new Date().getFullYear();
 </script>

@@ -79,11 +79,6 @@ main{width:100%;max-width:1180px;margin:auto;padding:55px 24px 75px}
 .pay-icon{display:inline-block;font-size:1.5rem;line-height:1;animation:heartBeat 1.4s ease-in-out infinite;filter:drop-shadow(0 0 8px rgba(246,195,68,.9))}
 
 
-.upi-button{cursor:pointer}
-.upi-id-line{max-width:950px;margin:16px auto 0;text-align:center;color:var(--blue);font-size:.95rem}
-.upi-id-line b{font-family:"Cinzel",Georgia,serif;letter-spacing:.05em;word-break:break-all}
-.how-to{max-width:420px;margin:22px auto 0;padding-left:22px;color:var(--text);font-size:.92rem}
-.how-to li{margin-bottom:4px}
 /* BACKUP BUTTONS */
 .alt-row{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;max-width:950px;margin:22px auto 0}
 .alt-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 24px;border-radius:999px;border:2px solid var(--gold);background:var(--white);color:var(--blue);font:700 .92rem "DM Sans",sans-serif;text-decoration:none;cursor:pointer;transition:.25s ease}
@@ -198,7 +193,7 @@ footer h2{color:var(--gold);font-family:"Cinzel",Georgia,serif;font-size:clamp(1
 
   </div>
 
-  <!-- PAY BUTTON: opens the UPI app with the trust's UPI ID filled in -->
+  <!-- PAY BUTTON: below bank details + QR -->
   <div class="pay-cta">
     <a id="upiLink" class="upi-button" href="#">
       <span class="pay-icon" aria-hidden="true">🙏</span>
@@ -206,19 +201,12 @@ footer h2{color:var(--gold);font-family:"Cinzel",Georgia,serif;font-size:clamp(1
     </a>
   </div>
 
-  <p class="alt-note" style="margin-top:18px">Not opening? Choose your app directly:</p>
-  <div class="alt-row" style="margin-top:10px">
-    <a class="alt-btn" id="gpayLink" href="#">GPay</a>
-    <a class="alt-btn" id="phonepeLink" href="#">PhonePe</a>
-    <a class="alt-btn" id="paytmLink" href="#">Paytm</a>
-  </div>
-
-  <div class="upi-id-line">UPI ID: <b id="upiIdText"></b></div>
+  <!-- BACKUP OPTIONS -->
   <div class="alt-row">
-    <button type="button" class="alt-btn" id="copyUpi">📋 <span id="copyLabel">Copy UPI ID</span></button>
+    <button type="button" class="alt-btn" id="copyUpi">📋 Copy UPI ID</button>
     <a class="alt-btn" id="qrDownload" href="#" download="Temple-Donation-QR">⬇ Download QR</a>
   </div>
-  <p class="alt-note">If a payment is declined: copy the UPI ID, open your UPI app, choose &ldquo;Pay to UPI ID&rdquo;, paste it and pay &mdash; or scan the QR above.</p>
+  <p class="alt-note">If the Pay button does not open your app, scan the QR above, or copy the UPI ID and pay from GPay / PhonePe / Paytm using &ldquo;Pay to UPI ID&rdquo;.</p>
 </main>
 
 <!-- FOOTER -->
@@ -251,37 +239,70 @@ qrImg.onerror = () => { qi++; qi < qrExts.length ? qrImg.src = "PaymentQR/QR." +
 qrImg.src = "PaymentQR/QR." + qrExts[0];
 
 
-/* ---------- UPI SETTINGS ----------
-   Change UPI_ID here when the bank gives a regular (non-merchant) UPI ID.      */
+/* ---------- UPI PAYMENT ---------- */
+
 const UPI_ID   = "shri9944455@barodampay";
 const UPI_NAME = "SHRI CHATHURBUJARAMAR SEVA TRUST";
 
-document.getElementById("upiIdText").textContent = UPI_ID;
+/*
+ * Build the UPI payment URL.
+ * Do NOT replace %40 with @.
+ * URLSearchParams correctly encodes the UPI ID.
+ */
+const upiParams = new URLSearchParams();
 
-/* Build UPI links. Minimal parameters only (no merchant/signature fields) so the
-   app treats it like a normal pay-to-UPI-ID request, the same as pasting the ID. */
-const q = "pa=" + UPI_ID + "&pn=" + encodeURIComponent(UPI_NAME) + "&cu=INR&tn=" + encodeURIComponent("Temple Donation");
-const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-document.getElementById("upiLink").href = "upi://pay?" + q;
-document.getElementById("gpayLink").href = isIOS
-  ? "gpay://upi/pay?" + q
-  : "intent://pay?" + q + "#Intent;scheme=upi;package=com.google.android.apps.nbu.paisa.user;end";
-document.getElementById("phonepeLink").href = "phonepe://pay?" + q;
-document.getElementById("paytmLink").href = "paytmmp://pay?" + q;
+upiParams.set("pa", UPI_ID);
+upiParams.set("pn", UPI_NAME);
+upiParams.set("cu", "INR");
+
+const upiPaymentURL = "upi://pay?" + upiParams.toString();
+
+const upiButton = document.getElementById("upiLink");
+
+/*
+ * Set the actual UPI URI on the button.
+ * Android can then hand it over to an installed UPI application.
+ */
+upiButton.href = upiPaymentURL;
+
+
+/*
+ * Explicitly launch UPI when the button is pressed.
+ * This avoids depending only on the dynamically-created href.
+ */
+upiButton.addEventListener("click", function(event) {
+
+  event.preventDefault();
+
+  window.location.href = upiPaymentURL;
+
+});
+
 
 /* Copy UPI ID */
 document.getElementById("copyUpi").addEventListener("click", function () {
-  const label = document.getElementById("copyLabel"), old = label.textContent;
-  const done = () => { label.textContent = "Copied! Now open your UPI app"; setTimeout(() => label.textContent = old, 3500); };
+  const btn = this, old = btn.innerHTML;
+  const done = () => { btn.innerHTML = "&#10003; Copied: " + UPI_ID; setTimeout(() => btn.innerHTML = old, 2500); };
+
   if (navigator.clipboard && window.isSecureContext) {
     navigator.clipboard.writeText(UPI_ID).then(done, () => window.prompt("Copy this UPI ID:", UPI_ID));
   } else {
     const t = document.createElement("textarea");
-    t.value = UPI_ID; document.body.appendChild(t); t.select();
-    try { document.execCommand("copy"); done(); } catch (e) { window.prompt("Copy this UPI ID:", UPI_ID); }
+    t.value = UPI_ID;
+    document.body.appendChild(t);
+    t.select();
+
+    try {
+      document.execCommand("copy");
+      done();
+    } catch (e) {
+      window.prompt("Copy this UPI ID:", UPI_ID);
+    }
+
     t.remove();
   }
 });
+
 
 /* Download QR (uses whichever QR file was found) */
 qrImg.addEventListener("load", () => {
